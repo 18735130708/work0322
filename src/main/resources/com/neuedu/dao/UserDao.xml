@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.dao.UserDao">
+    <select id="list" resultType="com.neuedu.pojo.User">
+        SELECT id,login_id as loginId,name,phone,password,sex,birthday,email,address,is_del as isDel FROM user
+    </select>
+    <insert id="add" parameterType="com.neuedu.pojo.User">
+        insert into user(login_id,name,phone,password,sex,birthday,email,address,is_del) values(
+          #{loginId},#{name},#{phone},#{password},#{sex},#{birthday},#{email},#{address},1
+        )
+    </insert>
+    <insert id="bacthAdd" parameterType="java.util.List">
+        insert into user(login_id,name,phone,password,sex,birthday,email,address,is_del) values
+        <foreach collection="list" item="user" separator=",">
+            (
+              #{user.loginId},#{user.name},#{user.phone},#{user.password},#{user.sex},#{user.birthday},#{user.email},#{user.address},#{user.isDel}
+            )
+        </foreach>
+
+    </insert>
+    <select id="getUserById" parameterType="java.lang.Integer" resultType="com.neuedu.pojo.User">
+        SELECT id,login_id as loginId,name,phone,password,sex,birthday,email,address,is_del as isDel FROM user where id=#{id}
+    </select>
+    <select id="getUserByLoginId" parameterType="java.lang.String" resultType="com.neuedu.pojo.User">
+        SELECT id,login_id as loginId,name,phone,password,sex,birthday,email,address,is_del as isDel FROM user where login_id=#{loginId}
+    </select>
+    <update id="update" parameterType="com.neuedu.pojo.User">
+        update user set phone=#{phone},sex=#{sex},birthday=#{birthday},email=#{email},address=#{address} where id=#{id}
+    </update>
+    <update id="delete" parameterType="java.lang.Integer">
+        update user set is_del = 0 where id=#{id}
+    </update>
+    <update id="reback" parameterType="java.lang.Integer">
+        update user set is_del = 1 where id=#{id}
+    </update>
+    <select id="count" resultType="java.lang.Integer" parameterType="com.neuedu.pojo.User">
+        select count(id) from user
+    </select>
+
+</mapper>
